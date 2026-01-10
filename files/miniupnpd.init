@@ -221,7 +221,9 @@ stop_service() {
 
 start_service() {
 	if [ -z "$(uci -q get upnpd.config.presentation_url)" ]; then
-		uci set upnpd.config.presentation_url="http://$(uci -q get network.lan.ipaddr)/"
+		full_addr=$(uci -q get network.lan.ipaddr)
+		ip_addr="${full_addr%%/*}"
+		uci set upnpd.config.presentation_url="http://$ip_addr/"
 		uci commit upnpd
 	fi
 	config_load "upnpd"
